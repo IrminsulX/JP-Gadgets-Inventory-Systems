@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>JP | Expenses</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,700;1,900&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/styles.css">
+<link rel="stylesheet" href="css/expenses.css">
+</head>
+<body class="page-scroll">
+
+<!-- ════════════════════════════════════
+     SHARED NAVIGATION BAR
+════════════════════════════════════ -->
+<nav class="shared-nav">
+  <div class="shared-nav-top">
+    <a href="dashboard.html" class="shared-nav-link">Dashboard</a>
+    <div class="shared-nav-logo">J<span>P</span></div>
+    <div class="shared-nav-right">
+      <span class="shared-nav-user" id="nav-user">Welcome</span>
+      <button class="shared-nav-logout" onclick="doLogout()">Sign Out</button>
+    </div>
+  </div>
+</nav>
+
+<!-- ════════════════════════════════════
+     EXPENSES CONTENT
+════════════════════════════════════ -->
+<main class="page-main">
+
+  <!-- Page Navigation -->
+  <div class="page-nav">
+    <a href="inventory.html" class="page-nav-link">Inventory</a>
+    <span class="page-nav-div">/</span>
+    <a href="sales.html" class="page-nav-link">Sales</a>
+    <span class="page-nav-div">/</span>
+    <a href="expenses.html" class="page-nav-link active">Expenses</a>
+  </div>
+
+  <div class="expense-header">
+    <h2 class="page-heading" style="margin-bottom:0">Expenses</h2>
+    <button class="add-expense-btn">+ Add Expense</button>
+  </div>
+
+  <div class="expense-list" style="margin-top:20px">
+    <div class="expense-row">
+      <div class="exp-name">Supplier Payment</div>
+      <div class="exp-date">May 3</div>
+      <div class="exp-amount">&#8369;42,000</div>
+    </div>
+    <div class="expense-row" style="animation-delay:.05s">
+      <div class="exp-name">Shipping &amp; Logistics</div>
+      <div class="exp-date">May 8</div>
+      <div class="exp-amount">&#8369;3,200</div>
+    </div>
+    <div class="expense-row" style="animation-delay:.10s">
+      <div class="exp-name">Store Rent</div>
+      <div class="exp-date">May 1</div>
+      <div class="exp-amount">&#8369;8,500</div>
+    </div>
+    <div class="expense-row" style="animation-delay:.15s">
+      <div class="exp-name">Marketing / Ads</div>
+      <div class="exp-date">May 12</div>
+      <div class="exp-amount">&#8369;2,100</div>
+    </div>
+  </div>
+</main>
+
+<!-- Toast -->
+<div class="toast" id="toast"></div>
+
+<script src="js/common.js"></script>
+<script>initNav();</script>
+</body>
+</html>

@@ -1,0 +1,41 @@
+/* ════════════════════════════════════
+   JP APP — SALES STYLES
+   sales.css
+════════════════════════════════════ */
+
+/* ─── Sales Summary Cards ─── */
+.sales-summary {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+
+.stat-card {
+  background: var(--orange);
+  border-radius: 16px;
+  padding: 20px 24px;
+  color: #fff;
+  animation: fadeUp 0.4s ease both;
+}
+.stat-card:nth-child(2) { animation-delay: 0.05s; }
+.stat-card:nth-child(3) { animation-delay: 0.10s; }
+.stat-card .stat-label { font-size: 13px; opacity: 0.85; font-weight: 500; margin-bottom: 6px; }
+.stat-card .stat-value { font-family: 'Playfair Display', serif; font-size: 36px; font-weight: 700; }
+.stat-card .stat-sub   { font-size: 12px; opacity: 0.7; margin-top: 4px; }
+
+/* ─── Sales List ─── */
+.sales-list { display: flex; flex-direction: column; gap: 10px; }
+
+.sale-row {
+  display: flex;
+  align-items: center;
+  background: var(--cream);
+  border-radius: 12px;
+  padding: 14px 20px;
+  border-left: 4px solid var(--orange);
+  gap: 16px;
+  animation: fadeUp 0.3s ease both;
+}
+.sale-row .sale-item   { flex: 1; font-weight: 600; font-size: 14px; }
+.sale-row .sale-qty    { color: var(--muted); font-size: 13px; }
+.sale-row .sale-amount { font-family: 'Playfair Display', serif; font-weight: 700; color: var(--orange-dark); font-size: 18px; }

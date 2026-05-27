@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>JP | Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,700;1,900&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/styles.css">
+<link rel="stylesheet" href="css/dashboard.css">
+</head>
+<body class="page-scroll">
+
+<!-- ════════════════════════════════════
+     SHARED NAVIGATION BAR
+════════════════════════════════════ -->
+<nav class="shared-nav">
+  <div class="shared-nav-top">
+    <a href="dashboard.html" class="shared-nav-link active">Dashboard</a>
+    <div class="shared-nav-logo">J<span>P</span></div>
+    <div class="shared-nav-right">
+      <span class="shared-nav-user" id="nav-user">Welcome</span>
+      <button class="shared-nav-logout" onclick="doLogout()">Sign Out</button>
+    </div>
+  </div>
+</nav>
+
+<!-- ════════════════════════════════════
+     MAIN CONTENT
+════════════════════════════════════ -->
+<main class="dash-main">
+
+  <!-- Welcome Section -->
+  <section class="dash-welcome">
+    <h2>Welcome back! <span class="live-dot" title="Live"></span></h2>
+    <p>Here's your JP Dashboard overview.</p>
+    <hr class="dash-hr">
+  </section>
+
+  <!-- Dashboard Cards -->
+  <div class="dash-cards">
+    <!-- Inventory Card -->
+    <a href="inventory.html" class="dash-card">
+      <div class="dash-card-icon">
+        <span>📦</span>
+      </div>
+      <h3 class="dash-card-title">Inventory</h3>
+      <p class="dash-card-text">Manage products, track stock levels, and handle suppliers.</p>
+      <span class="dash-card-btn">Manage Stock</span>
+    </a>
+
+    <!-- Sales Card -->
+    <a href="sales.html" class="dash-card">
+      <div class="dash-card-icon">
+        <span>💰</span>
+      </div>
+      <h3 class="dash-card-title">Sales</h3>
+      <p class="dash-card-text">Track transactions, view sales history, and analyze performance.</p>
+      <span class="dash-card-btn">View Reports</span>
+    </a>
+
+    <!-- Expenses Card -->
+    <a href="expenses.html" class="dash-card">
+      <div class="dash-card-icon">
+        <span>🧾</span>
+      </div>
+      <h3 class="dash-card-title">Expenses</h3>
+      <p class="dash-card-text">Log business expenses, categorize spending, and monitor costs.</p>
+      <span class="dash-card-btn">Add Expense</span>
+    </a>
+  </div>
+
+</main>
+
+<!-- ════════════════════════════════════
+     FOOTER
+════════════════════════════════════ -->
+<footer class="shared-footer">
+  <div class="footer-inner">
+    <span>&copy; 2025 JP Gadgets. All Rights Reserved. | Manila, Philippines</span>
+  </div>
+</footer>
+
+<!-- Toast -->
+<div class="toast" id="toast"></div>
+
+<script src="js/common.js"></script>
+<script>
+  initNav();
+</script>
+</body>
+</html>

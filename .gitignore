@@ -1,0 +1,22 @@
+# Dependencies
+node_modules/
+
+# SQLite database (contains real data, regenerated on first run)
+jp_ims.db
+jp_ims.db-shm
+jp_ims.db-wal
+
+# Environment variables (contains secrets)
+.env
+
+# OS junk
+Thumbs.db
+.DS_Store
+Desktop.ini
+
+# IDE
+.vscode/
+.idea/
+
+# DeepSeek internals
+.deepseek/

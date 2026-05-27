@@ -1,0 +1,154 @@
+/* ════════════════════════════════════
+   JP APP — DASHBOARD STYLES
+   dashboard.css
+════════════════════════════════════ */
+
+/* ─── Welcome Section ─── */
+.dash-main {
+  flex: 1;
+  padding: 40px 32px 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.dash-welcome {
+  text-align: center;
+  margin-bottom: 28px;
+}
+.dash-welcome h2 {
+  font-family: 'Playfair Display', serif;
+  font-size: 36px;
+  font-weight: 700;
+  color: var(--orange-dark);
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+.dash-welcome p {
+  font-size: 16px;
+  color: var(--muted);
+  margin-top: 6px;
+}
+
+.dash-hr {
+  width: 80px;
+  margin: 18px auto;
+  border: none;
+  border-top: 3px solid var(--orange);
+  opacity: 0.6;
+}
+
+/* ─── Live Dot ─── */
+@keyframes livePulse {
+  0%   { opacity: 1; box-shadow: 0 0 0 0 rgba(232, 146, 42, 0.5); }
+  70%  { opacity: .5; box-shadow: 0 0 0 10px rgba(232, 146, 42, 0); }
+  100% { opacity: 1; box-shadow: 0 0 0 0 rgba(232, 146, 42, 0); }
+}
+.live-dot {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  background: var(--orange);
+  border-radius: 50%;
+  animation: livePulse 2s infinite;
+}
+
+/* ─── Dashboard Cards ─── */
+.dash-cards {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+  max-width: 920px;
+  width: 100%;
+}
+
+.dash-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  background: var(--cream);
+  border: 2px solid var(--orange);
+  border-radius: 20px;
+  padding: 32px 20px 24px;
+  text-decoration: none;
+  color: var(--text);
+  transition: all 0.3s cubic-bezier(.22, 1, .36, 1);
+  animation: fadeUp 0.4s ease both;
+}
+.dash-card:nth-child(1) { animation-delay: 0.05s; }
+.dash-card:nth-child(2) { animation-delay: 0.15s; }
+.dash-card:nth-child(3) { animation-delay: 0.25s; }
+
+.dash-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 12px 32px rgba(192, 82, 26, 0.25);
+  border-color: var(--orange-dark);
+}
+
+.dash-card-icon {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: var(--orange);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 14px;
+  font-size: 32px;
+  transition: transform 0.3s;
+}
+.dash-card:hover .dash-card-icon {
+  transform: scale(1.1);
+}
+
+.dash-card-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 22px;
+  font-weight: 700;
+  font-style: italic;
+  color: var(--orange-dark);
+  margin-bottom: 8px;
+}
+
+.dash-card-text {
+  font-size: 14px;
+  color: var(--muted);
+  line-height: 1.6;
+  margin-bottom: 18px;
+  flex: 1;
+}
+
+.dash-card-btn {
+  display: inline-block;
+  padding: 10px 26px;
+  background: var(--orange);
+  color: #fff;
+  border-radius: 50px;
+  font-weight: 600;
+  font-size: 14px;
+  transition: all 0.2s;
+}
+.dash-card:hover .dash-card-btn {
+  background: var(--orange-dark);
+  box-shadow: 0 4px 14px rgba(192, 82, 26, 0.3);
+}
+
+/* ─── Footer ─── */
+.shared-footer {
+  background: var(--orange-deep);
+  border-top: 3px solid var(--orange);
+  padding: 18px 32px;
+  margin-top: auto;
+}
+
+.footer-inner {
+  max-width: 920px;
+  margin: 0 auto;
+  text-align: center;
+}
+.footer-inner span {
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.7);
+}

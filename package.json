@@ -1,0 +1,14 @@
+{
+  "name": "jp-ims",
+  "version": "1.0.0",
+  "description": "JP Inventory Management System — Node.js + SQLite backend",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "dependencies": {
+    "better-sqlite3": "^11.0.0",
+    "express": "^4.21.0"
+  }
+}

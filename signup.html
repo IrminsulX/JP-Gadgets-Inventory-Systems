@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>JP App — Sign Up</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,700;1,900&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+<!-- ════════════════════════════════════
+     SIGN UP SCREEN
+════════════════════════════════════ -->
+<div id="screen-signup" class="screen auth-screen active">
+  <div class="auth-left">
+    <div class="blob blob-1"></div>
+    <div class="blob blob-2"></div>
+    <div class="blob blob-3"></div>
+    <div class="logo">J<span>P</span></div>
+  </div>
+  <div class="auth-right">
+    <div class="auth-title">Create<br>Account</div>
+    <div class="auth-form" id="signup-form">
+      <input class="auth-input" id="signup-name" type="text" placeholder="Full Name">
+      <input class="auth-input" id="signup-email" type="email" placeholder="Enter Email">
+      <div class="input-wrap">
+        <input class="auth-input" id="signup-password" type="password" placeholder="Enter Password">
+      </div>
+      <input class="auth-input" id="signup-confirm" type="password" placeholder="Confirm Password">
+      <button class="btn-primary" onclick="doSignup()">Sign Up</button>
+      <div class="auth-alt-link">
+        Already have an account? <a href="login.html">Log in</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Toast Notification -->
+<div class="toast" id="toast"></div>
+
+<script src="js/auth.js"></script>
+</body>
+</html>

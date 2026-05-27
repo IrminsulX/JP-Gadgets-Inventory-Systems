@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>JP | Sales</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,700;1,900&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/styles.css">
+<link rel="stylesheet" href="css/sales.css">
+</head>
+<body class="page-scroll">
+
+<!-- ════════════════════════════════════
+     SHARED NAVIGATION BAR
+════════════════════════════════════ -->
+<nav class="shared-nav">
+  <div class="shared-nav-top">
+    <a href="dashboard.html" class="shared-nav-link">Dashboard</a>
+    <div class="shared-nav-logo">J<span>P</span></div>
+    <div class="shared-nav-right">
+      <span class="shared-nav-user" id="nav-user">Welcome</span>
+      <button class="shared-nav-logout" onclick="doLogout()">Sign Out</button>
+    </div>
+  </div>
+</nav>
+
+<!-- ════════════════════════════════════
+     SALES CONTENT
+════════════════════════════════════ -->
+<main class="page-main">
+
+  <!-- Page Navigation -->
+  <div class="page-nav">
+    <a href="inventory.html" class="page-nav-link">Inventory</a>
+    <span class="page-nav-div">/</span>
+    <a href="sales.html" class="page-nav-link active">Sales</a>
+    <span class="page-nav-div">/</span>
+    <a href="expenses.html" class="page-nav-link">Expenses</a>
+  </div>
+
+  <h2 class="page-heading">Sales</h2>
+
+  <div class="sales-summary">
+    <div class="stat-card">
+      <div class="stat-label">Total Revenue</div>
+      <div class="stat-value">&#8369;84,200</div>
+      <div class="stat-sub">This month</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Units Sold</div>
+      <div class="stat-value">142</div>
+      <div class="stat-sub">+18% vs last month</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Top Product</div>
+      <div class="stat-value" style="font-size:22px;margin-top:4px">iPhone 15 Pro</div>
+      <div class="stat-sub">54 units sold</div>
+    </div>
+  </div>
+
+  <div class="sales-list">
+    <div class="sale-row">
+      <div class="sale-item">iPhone 15 Pro Max</div>
+      <div class="sale-qty">&times;12 units</div>
+      <div class="sale-amount">&#8369;37,200</div>
+    </div>
+    <div class="sale-row" style="animation-delay:.05s">
+      <div class="sale-item">iPhone 15 Pro</div>
+      <div class="sale-qty">&times;20 units</div>
+      <div class="sale-amount">&#8369;28,000</div>
+    </div>
+    <div class="sale-row" style="animation-delay:.10s">
+      <div class="sale-item">iPhone 15</div>
+      <div class="sale-qty">&times;18 units</div>
+      <div class="sale-amount">&#8369;19,000</div>
+    </div>
+  </div>
+</main>
+
+<!-- Toast -->
+<div class="toast" id="toast"></div>
+
+<script src="js/common.js"></script>
+<script>initNav();</script>
+</body>
+</html>
