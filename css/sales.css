@@ -3,39 +3,178 @@
    sales.css
 ════════════════════════════════════ */
 
-/* ─── Sales Summary Cards ─── */
-.sales-summary {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
+/* ─── Layout (shared with inventory) ─── */
+.inv-main {
+  display: flex;
+  flex-direction: column;
+  padding: 24px 32px 40px;
+  flex: 1;
+}
+.inv-body {
+  display: flex;
+  gap: 32px;
+  flex: 1;
+}
+.batch-sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  min-width: 180px;
+}
+.batch-main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
   gap: 16px;
 }
 
-.stat-card {
+/* ─── Batch Pills ─── */
+.batch-pill {
+  padding: 12px 20px;
   background: var(--orange);
-  border-radius: 16px;
-  padding: 20px 24px;
   color: #fff;
-  animation: fadeUp 0.4s ease both;
-}
-.stat-card:nth-child(2) { animation-delay: 0.05s; }
-.stat-card:nth-child(3) { animation-delay: 0.10s; }
-.stat-card .stat-label { font-size: 13px; opacity: 0.85; font-weight: 500; margin-bottom: 6px; }
-.stat-card .stat-value { font-family: 'Playfair Display', serif; font-size: 36px; font-weight: 700; }
-.stat-card .stat-sub   { font-size: 12px; opacity: 0.7; margin-top: 4px; }
-
-/* ─── Sales List ─── */
-.sales-list { display: flex; flex-direction: column; gap: 10px; }
-
-.sale-row {
+  border: none;
+  border-radius: 50px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  text-align: left;
+  transition: all 0.2s;
+  position: relative;
+  overflow: hidden;
   display: flex;
   align-items: center;
-  background: var(--cream);
-  border-radius: 12px;
-  padding: 14px 20px;
-  border-left: 4px solid var(--orange);
-  gap: 16px;
+  justify-content: space-between;
+  gap: 10px;
+}
+.batch-pill::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(255, 255, 255, 0);
+  transition: background 0.2s;
+  pointer-events: none;
+}
+.batch-pill:hover::after { background: rgba(255, 255, 255, 0.15); }
+.batch-pill.selected { background: var(--orange-deep); box-shadow: inset 0 2px 8px rgba(0,0,0,0.2); }
+
+.batch-pill-label {
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.batch-pill-plus {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.25);
+  font-size: 16px;
+  line-height: 1;
+  cursor: pointer;
+  transition: background 0.2s;
+  flex-shrink: 0;
+  position: relative;
+  z-index: 1;
+}
+.batch-pill-plus:hover { background: rgba(255, 255, 255, 0.45); }
+
+/* ─── Batch View Title ─── */
+.batch-view-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--orange-dark);
+  font-style: italic;
+}
+
+/* ─── Placeholder ─── */
+.placeholder-msg {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Playfair Display', serif;
+  font-size: 20px;
+  font-style: italic;
+  font-weight: 700;
+  color: var(--orange-dark);
+  text-align: center;
+  line-height: 1.5;
+}
+
+/* ─── Sales Overview ─── */
+.sales-overview {
+  display: none;
+  flex-direction: column;
+  gap: 12px;
   animation: fadeUp 0.3s ease both;
 }
-.sale-row .sale-item   { flex: 1; font-weight: 600; font-size: 14px; }
-.sale-row .sale-qty    { color: var(--muted); font-size: 13px; }
-.sale-row .sale-amount { font-family: 'Playfair Display', serif; font-weight: 700; color: var(--orange-dark); font-size: 18px; }
+
+.sales-overview-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 22px;
+  font-weight: 700;
+  font-style: italic;
+  color: var(--orange-dark);
+}
+
+.sales-total {
+  font-family: 'Playfair Display', serif;
+  font-size: 26px;
+  font-weight: 700;
+  color: var(--orange-deep);
+  margin-bottom: 4px;
+}
+
+/* ─── Sales Table ─── */
+.sales-table-wrap {
+  overflow-x: auto;
+}
+
+.sales-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12px;
+  min-width: 900px;
+}
+.sales-table th {
+  background: var(--orange);
+  color: #fff;
+  padding: 8px 10px;
+  text-align: left;
+  font-size: 11px;
+  font-weight: 600;
+  white-space: nowrap;
+  letter-spacing: 0.3px;
+}
+.sales-table th:first-child { border-radius: 8px 0 0 0; }
+.sales-table th:last-child  { border-radius: 0 8px 0 0; }
+.sales-table td {
+  padding: 8px 10px;
+  border-bottom: 1px solid rgba(232, 146, 42, 0.15);
+  white-space: nowrap;
+}
+.sales-table tr:last-child td { border-bottom: none; }
+.sales-table tr:nth-child(even) td { background: rgba(232, 146, 42, 0.06); }
+.sales-table tr:hover td { background: rgba(232, 146, 42, 0.12); }
+
+.sale-edit-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: var(--orange);
+  color: #fff;
+  font-size: 11px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.sale-edit-icon:hover { background: var(--orange-dark); }

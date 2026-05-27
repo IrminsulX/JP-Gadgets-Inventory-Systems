@@ -61,7 +61,28 @@ const API = (function() {
     getRepairs: (itemId) => request('GET', '/api/items/' + itemId + '/repairs'),
 
     /** Add a repair record */
-    addRepair: (itemId, type, cost) => request('POST', '/api/items/' + itemId + '/repairs', { type, cost })
+    addRepair: (itemId, type, cost) => request('POST', '/api/items/' + itemId + '/repairs', { type, cost }),
+
+    // ── Sales ────────────────────────
+
+    /** Get all sales, optionally filtered by batch_id */
+    getSales: (batchId) => {
+      var url = '/api/sales';
+      if (batchId) url += '?batch_id=' + batchId;
+      return request('GET', url);
+    },
+
+    /** Create a new sale record */
+    createSale: (data) => request('POST', '/api/sales', data),
+
+    /** Update a sale record */
+    updateSale: (id, data) => request('PUT', '/api/sales/' + id, data),
+
+    /** Delete a sale */
+    deleteSale: (id) => request('DELETE', '/api/sales/' + id),
+
+    /** Get sales summary stats */
+    getSalesSummary: () => request('GET', '/api/sales/summary')
   };
 
 })();

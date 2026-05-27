@@ -27,7 +27,7 @@
 <!-- ════════════════════════════════════
      SALES CONTENT
 ════════════════════════════════════ -->
-<main class="page-main">
+<main class="inv-main">
 
   <!-- Page Navigation -->
   <div class="page-nav">
@@ -38,49 +38,151 @@
     <a href="expenses.html" class="page-nav-link">Expenses</a>
   </div>
 
-  <h2 class="page-heading">Sales</h2>
+  <!-- Batch Sidebar + Sales View -->
+  <div class="inv-body">
+    <div class="batch-sidebar" id="sales-batch-sidebar">
+      <!-- Batch pills injected by JS -->
+    </div>
+    <div class="batch-main">
+      <div class="placeholder-msg" id="sales-placeholder">Select a batch to<br>view sales.</div>
 
-  <div class="sales-summary">
-    <div class="stat-card">
-      <div class="stat-label">Total Revenue</div>
-      <div class="stat-value">&#8369;84,200</div>
-      <div class="stat-sub">This month</div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-label">Units Sold</div>
-      <div class="stat-value">142</div>
-      <div class="stat-sub">+18% vs last month</div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-label">Top Product</div>
-      <div class="stat-value" style="font-size:22px;margin-top:4px">iPhone 15 Pro</div>
-      <div class="stat-sub">54 units sold</div>
+      <!-- Sales Overview (hidden until batch selected) -->
+      <div class="sales-overview" id="sales-overview">
+        <div class="sales-overview-title" id="sales-overview-title">SALES OVERVIEW</div>
+        <div class="sales-total" id="sales-total">Total Sales (Calculated): ₱0</div>
+        <div class="sales-table-wrap">
+          <table class="sales-table">
+            <thead>
+              <tr>
+                <th>Product</th><th>GB</th><th>Qty</th><th>Customer</th>
+                <th>Payment</th><th>Delivery</th><th>Sold By</th>
+                <th>Receipt #</th><th>Amount</th><th>Encashed</th>
+                <th>In Stock</th><th>Date Sold</th><th></th>
+              </tr>
+            </thead>
+            <tbody id="sales-tbody"></tbody>
+          </table>
+        </div>
+      </div>
     </div>
   </div>
 
-  <div class="sales-list">
-    <div class="sale-row">
-      <div class="sale-item">iPhone 15 Pro Max</div>
-      <div class="sale-qty">&times;12 units</div>
-      <div class="sale-amount">&#8369;37,200</div>
+  <!-- ── Modal Overlay ── -->
+  <div class="modal-overlay" id="modal-overlay" onclick="closeSaleModal();closeEditSaleModal()"></div>
+
+  <!-- ── Add Sale Modal ── -->
+  <div class="modal modal-wide" id="modal-add-sale">
+    <div class="modal-title">Add New Sale</div>
+    <div class="modal-body">
+
+      <select class="form-select modal-input" id="sale-unit">
+        <option value="">Select Unit From Stock</option>
+      </select>
+
+      <select class="form-select modal-input" id="sale-gb">
+        <option value="">Select GB</option>
+        <option value="64GB">64 GB</option>
+        <option value="128GB">128 GB</option>
+        <option value="256GB">256 GB</option>
+        <option value="512GB">512 GB</option>
+        <option value="1TB">1 TB</option>
+      </select>
+
+      <select class="form-select modal-input" id="sale-soldby">
+        <option value="">Sold by</option>
+        <option value="JP Store">JP Store</option>
+        <option value="John">John</option>
+        <option value="Maria">Maria</option>
+        <option value="Alex">Alex</option>
+        <option value="Online Team">Online Team</option>
+      </select>
+
+      <input class="form-input modal-input" id="sale-qty" type="number" min="1" value="1" placeholder="Quantity:">
+
+      <select class="form-select modal-input" id="sale-payment">
+        <option value="">Select Mode of Payment</option>
+        <option value="GCash">GCash</option>
+        <option value="Maya">Maya</option>
+        <option value="Bank Transfer">Bank Transfer</option>
+        <option value="COD">Cash on Delivery (COD)</option>
+        <option value="Cash Meetup">Cash (Meetup/Pickup)</option>
+      </select>
+
+      <select class="form-select modal-input" id="sale-delivery" onchange="toggleReceiptField()">
+        <option value="">Mode of Delivery</option>
+        <option value="Lalamove">Lalamove</option>
+        <option value="Grab">Grab</option>
+        <option value="LBC">LBC</option>
+        <option value="J&T">J&amp;T</option>
+        <option value="Meetup">Meetup</option>
+        <option value="Pickup">Pickup</option>
+      </select>
+
+      <input class="form-input modal-input" id="sale-customer" placeholder="Enter Name of Customer:">
+
+      <div id="receipt-group" style="display:none">
+        <input class="form-input modal-input" id="sale-receipt" placeholder="if via LBC, Input Receipt Number: (Optional)">
+      </div>
+
+      <label style="display:flex;align-items:center;gap:8px;font-size:14px;color:var(--text);cursor:pointer">
+        <input type="checkbox" id="sale-encashed" style="width:18px;height:18px;accent-color:var(--orange)">
+        Mark as Encashed
+      </label>
+
     </div>
-    <div class="sale-row" style="animation-delay:.05s">
-      <div class="sale-item">iPhone 15 Pro</div>
-      <div class="sale-qty">&times;20 units</div>
-      <div class="sale-amount">&#8369;28,000</div>
-    </div>
-    <div class="sale-row" style="animation-delay:.10s">
-      <div class="sale-item">iPhone 15</div>
-      <div class="sale-qty">&times;18 units</div>
-      <div class="sale-amount">&#8369;19,000</div>
+    <div class="modal-actions">
+      <button class="btn-cancel" onclick="closeSaleModal()">Cancel</button>
+      <button class="btn-save" onclick="saveSale()">Save Sale Item</button>
     </div>
   </div>
+
+  <!-- ── Edit Sale Modal ── -->
+  <div class="modal modal-wide" id="modal-edit-sale">
+    <div class="modal-title">Edit Sale</div>
+    <div class="modal-body">
+      <input type="hidden" id="edit-sale-id">
+
+      <select class="form-select modal-input" id="edit-sale-payment">
+        <option value="">Select Mode of Payment</option>
+        <option value="GCash">GCash</option>
+        <option value="Maya">Maya</option>
+        <option value="Bank Transfer">Bank Transfer</option>
+        <option value="COD">Cash on Delivery (COD)</option>
+        <option value="Cash Meetup">Cash (Meetup/Pickup)</option>
+      </select>
+
+      <select class="form-select modal-input" id="edit-sale-delivery">
+        <option value="">Mode of Delivery</option>
+        <option value="Lalamove">Lalamove</option>
+        <option value="Grab">Grab</option>
+        <option value="LBC">LBC</option>
+        <option value="J&T">J&amp;T</option>
+        <option value="Meetup">Meetup</option>
+        <option value="Pickup">Pickup</option>
+      </select>
+
+      <input class="form-input modal-input" id="edit-sale-qty" type="number" min="1" placeholder="Quantity:">
+
+      <input class="form-input modal-input" id="edit-sale-receipt" placeholder="Receipt Number:">
+
+      <label style="display:flex;align-items:center;gap:8px;font-size:14px;color:var(--text);cursor:pointer">
+        <input type="checkbox" id="edit-sale-encashed" style="width:18px;height:18px;accent-color:var(--orange)">
+        Mark as Encashed
+      </label>
+    </div>
+    <div class="modal-actions">
+      <button class="btn-cancel" onclick="closeEditSaleModal()">Cancel</button>
+      <button class="btn-save" onclick="saveEditSale()">Save Changes</button>
+    </div>
+  </div>
+
 </main>
 
 <!-- Toast -->
 <div class="toast" id="toast"></div>
 
 <script src="js/common.js"></script>
-<script>initNav();</script>
+<script src="js/api.js"></script>
+<script src="js/sales.js"></script>
 </body>
 </html>

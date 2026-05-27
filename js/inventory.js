@@ -334,7 +334,7 @@ async function saveItemPricing() {
 
   try {
     await API.updateItem(ci.id, { orig_price: orig, sell_price: sell, price: sell || '₱0' });
-  } catch (e) { showToast('Server error'); return; }
+  } catch (e) { console.error(e); showToast('Error: ' + e.message); return; }
 
   await refresh();
   showToast('Pricing saved! ✓');
@@ -349,7 +349,7 @@ async function saveItemStock() {
 
   try {
     await API.updateItem(ci.id, { qty: qty });
-  } catch (e) { showToast('Server error'); return; }
+  } catch (e) { console.error(e); showToast('Error: ' + e.message); return; }
 
   await refresh();
   showToast('Stock updated to ' + qty + '! ✓');

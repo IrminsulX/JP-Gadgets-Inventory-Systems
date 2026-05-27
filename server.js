@@ -49,6 +49,23 @@ db.exec(`
     cost    TEXT    NOT NULL,
     FOREIGN KEY (item_id) REFERENCES items(id) ON DELETE CASCADE
   );
+
+  CREATE TABLE IF NOT EXISTS sales (
+    id              INTEGER PRIMARY KEY AUTOINCREMENT,
+    batch_id        INTEGER,
+    unit            TEXT    NOT NULL,
+    gb              TEXT    DEFAULT '',
+    sold_by         TEXT    DEFAULT '',
+    quantity        INTEGER DEFAULT 1,
+    sell_price      TEXT    DEFAULT '₱0',
+    payment_mode    TEXT    DEFAULT '',
+    delivery_mode   TEXT    DEFAULT '',
+    customer_name   TEXT    DEFAULT '',
+    receipt_number  TEXT    DEFAULT '',
+    encashed        INTEGER DEFAULT 0,
+    sale_date       TEXT    DEFAULT (datetime('now','localtime')),
+    FOREIGN KEY (batch_id) REFERENCES batches(id) ON DELETE SET NULL
+  );
 `);
 
 // ── Seed data (only if empty) ────────
@@ -116,12 +133,23 @@ app.post('/api/batches/:id/items', (req, res) => {
   res.json({ id: result.lastInsertRowid, product, sku, qty: qty || 1, price: price || '₱0', image_url: image_url || '', orig_price: '', sell_price: '', repairs: [] });
 });
 
-// ── PUT update item ──
+// ── PUT update item (partial — only updates fields that are sent) ──
 app.put('/api/items/:id', (req, res) => {
-  const { product, sku, qty, price, image_url, orig_price, sell_price } = req.body;
-  db.prepare(
-    'UPDATE items SET product=?, sku=?, qty=?, price=?, image_url=?, orig_price=?, sell_price=? WHERE id=?'
-  ).run(product, sku, qty, price, image_url || '', orig_price || '', sell_price || '', req.params.id);
+  const existing = db.prepare('SELECT * FROM items WHERE id = ?').get(req.params.id);
+  if (!existing) return res.status(404).json({ error: 'item not found' });
+
+  const allowed = ['product', 'sku', 'qty', 'price', 'image_url', 'orig_price', 'sell_price'];
+  const sets = [];
+  const vals = [];
+  allowed.forEach(function(f) {
+    if (req.body[f] !== undefined) {
+      sets.push(f + ' = ?');
+      vals.push(req.body[f]);
+    }
+  });
+  if (sets.length === 0) return res.json({ ok: true });
+  vals.push(req.params.id);
+  db.prepare('UPDATE items SET ' + sets.join(', ') + ' WHERE id = ?').run(...vals);
   res.json({ ok: true });
 });
 
@@ -143,6 +171,65 @@ app.post('/api/items/:id/repairs', (req, res) => {
   if (!type || !cost) return res.status(400).json({ error: 'type and cost required' });
   const result = db.prepare('INSERT INTO repairs (item_id, type, cost) VALUES (?, ?, ?)').run(req.params.id, type, cost);
   res.json({ id: result.lastInsertRowid, type, cost });
+});
+
+// ════════════════════════════════════
+//  SALES ROUTES
+// ════════════════════════════════════
+
+// ── GET all sales (optionally filter by batch_id) ──
+app.get('/api/sales', (req, res) => {
+  const { batch_id } = req.query;
+  let sales;
+  if (batch_id) {
+    sales = db.prepare('SELECT * FROM sales WHERE batch_id = ? ORDER BY id DESC').all(batch_id);
+  } else {
+    sales = db.prepare('SELECT * FROM sales ORDER BY id DESC').all();
+  }
+  res.json(sales);
+});
+
+// ── POST create sale ──
+app.post('/api/sales', (req, res) => {
+  try {
+    const { batch_id, unit, gb, sold_by, quantity, sell_price, payment_mode, delivery_mode, customer_name, receipt_number, encashed } = req.body;
+    if (!unit) return res.status(400).json({ error: 'unit required' });
+    const result = db.prepare(
+      'INSERT INTO sales (batch_id, unit, gb, sold_by, quantity, sell_price, payment_mode, delivery_mode, customer_name, receipt_number, encashed) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)'
+    ).run(batch_id || null, unit, gb || '', sold_by || '', quantity || 1, sell_price || '₱0', payment_mode || '', delivery_mode || '', customer_name || '', receipt_number || '', encashed ? 1 : 0);
+    const sale = db.prepare('SELECT * FROM sales WHERE id = ?').get(result.lastInsertRowid);
+    res.json(sale);
+  } catch (e) {
+    console.error('POST /api/sales error:', e.message);
+    res.status(500).json({ error: e.message });
+  }
+});
+
+// ── PUT update sale ──
+app.put('/api/sales/:id', (req, res) => {
+  const { payment_mode, delivery_mode, quantity, receipt_number, encashed } = req.body;
+  db.prepare(
+    'UPDATE sales SET payment_mode=?, delivery_mode=?, quantity=?, receipt_number=?, encashed=? WHERE id=?'
+  ).run(payment_mode || '', delivery_mode || '', quantity || 1, receipt_number || '', encashed ? 1 : 0, req.params.id);
+  res.json({ ok: true });
+});
+
+// ── DELETE sale ──
+app.delete('/api/sales/:id', (req, res) => {
+  db.prepare('DELETE FROM sales WHERE id = ?').run(req.params.id);
+  res.json({ ok: true });
+});
+
+// ── GET sales summary stats ──
+app.get('/api/sales/summary', (_req, res) => {
+  const total = db.prepare("SELECT SUM(quantity) AS units, COUNT(*) AS transactions FROM sales").get();
+  const top = db.prepare("SELECT unit, SUM(quantity) AS qty FROM sales GROUP BY unit ORDER BY qty DESC LIMIT 1").get();
+  res.json({
+    totalUnits: total.units || 0,
+    transactions: total.transactions || 0,
+    topProduct: top ? top.unit : '—',
+    topQty: top ? top.qty : 0
+  });
 });
 
 // ── Fallback: SPA routing ────────────
