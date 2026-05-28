@@ -238,15 +238,28 @@ function openEditSaleModal(saleId) {
   }
   if (!sale) return;
 
-  document.getElementById('edit-sale-id').value = sale.id;
-  document.getElementById('edit-sale-payment').value = sale.payment_mode || '';
-  document.getElementById('edit-sale-delivery').value = sale.delivery_mode || '';
-  document.getElementById('edit-sale-qty').value = sale.quantity;
-  document.getElementById('edit-sale-receipt').value = sale.receipt_number || '';
+  document.getElementById('edit-sale-id').value       = sale.id;
+  document.getElementById('edit-sale-unit').value      = sale.unit || '';
+  document.getElementById('edit-sale-gb').value        = sale.gb || '';
+  document.getElementById('edit-sale-soldby').value     = sale.sold_by || '';
+  document.getElementById('edit-sale-qty').value        = sale.quantity;
+  document.getElementById('edit-sale-payment').value    = sale.payment_mode || '';
+  document.getElementById('edit-sale-delivery').value   = sale.delivery_mode || '';
+  document.getElementById('edit-sale-customer').value   = sale.customer_name || '';
+  document.getElementById('edit-sale-receipt').value    = sale.receipt_number || '';
+  document.getElementById('edit-sale-amount').value     = sale.sell_price || '';
   document.getElementById('edit-sale-encashed').checked = !!sale.encashed;
+
+  // Toggle receipt field visibility
+  toggleEditReceiptField();
 
   document.getElementById('modal-edit-sale').classList.add('show');
   document.getElementById('modal-overlay').classList.add('show');
+}
+
+function toggleEditReceiptField() {
+  var del = document.getElementById('edit-sale-delivery').value;
+  document.getElementById('edit-receipt-group').style.display = (del === 'LBC') ? 'block' : 'none';
 }
 
 function closeEditSaleModal() {
@@ -256,19 +269,25 @@ function closeEditSaleModal() {
 
 async function saveEditSale() {
   var id       = document.getElementById('edit-sale-id').value;
+  var soldBy   = document.getElementById('edit-sale-soldby').value;
+  var qty      = parseInt(document.getElementById('edit-sale-qty').value, 10) || 1;
   var payment  = document.getElementById('edit-sale-payment').value;
   var delivery = document.getElementById('edit-sale-delivery').value;
-  var qty      = parseInt(document.getElementById('edit-sale-qty').value, 10) || 1;
+  var cust     = document.getElementById('edit-sale-customer').value.trim();
   var receipt  = document.getElementById('edit-sale-receipt').value.trim();
   var encashed = document.getElementById('edit-sale-encashed').checked ? 1 : 0;
 
+  if (!cust) { showToast('Please enter customer name'); return; }
+
   try {
     await API.updateSale(id, {
-      payment_mode:  payment,
-      delivery_mode: delivery,
-      quantity:      qty,
+      sold_by:        soldBy,
+      quantity:       qty,
+      payment_mode:   payment,
+      delivery_mode:  delivery,
+      customer_name:  cust,
       receipt_number: receipt,
-      encashed:      encashed
+      encashed:       encashed
     });
   } catch (e) { console.error(e); showToast('Error: ' + e.message); return; }
 

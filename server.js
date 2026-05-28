@@ -207,10 +207,10 @@ app.post('/api/sales', (req, res) => {
 
 // ── PUT update sale ──
 app.put('/api/sales/:id', (req, res) => {
-  const { payment_mode, delivery_mode, quantity, receipt_number, encashed } = req.body;
+  const { sold_by, quantity, payment_mode, delivery_mode, customer_name, receipt_number, encashed } = req.body;
   db.prepare(
-    'UPDATE sales SET payment_mode=?, delivery_mode=?, quantity=?, receipt_number=?, encashed=? WHERE id=?'
-  ).run(payment_mode || '', delivery_mode || '', quantity || 1, receipt_number || '', encashed ? 1 : 0, req.params.id);
+    'UPDATE sales SET sold_by=?, quantity=?, payment_mode=?, delivery_mode=?, customer_name=?, receipt_number=?, encashed=? WHERE id=?'
+  ).run(sold_by || '', quantity || 1, payment_mode || '', delivery_mode || '', customer_name || '', receipt_number || '', encashed ? 1 : 0, req.params.id);
   res.json({ ok: true });
 });
 

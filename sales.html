@@ -57,7 +57,7 @@
                 <th>Product</th><th>GB</th><th>Qty</th><th>Customer</th>
                 <th>Payment</th><th>Delivery</th><th>Sold By</th>
                 <th>Receipt #</th><th>Amount</th><th>Encashed</th>
-                <th>In Stock</th><th>Date Sold</th><th></th>
+                <th>In Stock</th><th>Date Sold</th><th>Edit</th>
               </tr>
             </thead>
             <tbody id="sales-tbody"></tbody>
@@ -121,12 +121,12 @@
       <input class="form-input modal-input" id="sale-customer" placeholder="Enter Name of Customer:">
 
       <div id="receipt-group" style="display:none">
-        <input class="form-input modal-input" id="sale-receipt" placeholder="if via LBC, Input Receipt Number: (Optional)">
+        <input class="form-input modal-input" id="sale-receipt" placeholder="Receipt Number: (Optional)">
       </div>
 
-      <label style="display:flex;align-items:center;gap:8px;font-size:14px;color:var(--text);cursor:pointer">
-        <input type="checkbox" id="sale-encashed" style="width:18px;height:18px;accent-color:var(--orange)">
-        Mark as Encashed
+      <label class="modal-check">
+        <input type="checkbox" id="sale-encashed">
+        <span>Mark as Encashed</span>
       </label>
 
     </div>
@@ -142,6 +142,20 @@
     <div class="modal-body">
       <input type="hidden" id="edit-sale-id">
 
+      <input class="form-input modal-input" id="edit-sale-unit" disabled placeholder="Name of the Unit">
+      <input class="form-input modal-input" id="edit-sale-gb" disabled placeholder="GB of the Unit">
+
+      <select class="form-select modal-input" id="edit-sale-soldby">
+        <option value="">Sold by</option>
+        <option value="JP Store">JP Store</option>
+        <option value="John">John</option>
+        <option value="Maria">Maria</option>
+        <option value="Alex">Alex</option>
+        <option value="Online Team">Online Team</option>
+      </select>
+
+      <input class="form-input modal-input" id="edit-sale-qty" type="number" min="1" placeholder="Quantity:">
+
       <select class="form-select modal-input" id="edit-sale-payment">
         <option value="">Select Mode of Payment</option>
         <option value="GCash">GCash</option>
@@ -151,7 +165,7 @@
         <option value="Cash Meetup">Cash (Meetup/Pickup)</option>
       </select>
 
-      <select class="form-select modal-input" id="edit-sale-delivery">
+      <select class="form-select modal-input" id="edit-sale-delivery" onchange="toggleEditReceiptField()">
         <option value="">Mode of Delivery</option>
         <option value="Lalamove">Lalamove</option>
         <option value="Grab">Grab</option>
@@ -161,18 +175,22 @@
         <option value="Pickup">Pickup</option>
       </select>
 
-      <input class="form-input modal-input" id="edit-sale-qty" type="number" min="1" placeholder="Quantity:">
+      <input class="form-input modal-input" id="edit-sale-customer" placeholder="Enter Name of Customer:">
 
-      <input class="form-input modal-input" id="edit-sale-receipt" placeholder="Receipt Number:">
+      <div id="edit-receipt-group" style="display:none">
+        <input class="form-input modal-input" id="edit-sale-receipt" placeholder="Receipt Number: (Optional)">
+      </div>
 
-      <label style="display:flex;align-items:center;gap:8px;font-size:14px;color:var(--text);cursor:pointer">
-        <input type="checkbox" id="edit-sale-encashed" style="width:18px;height:18px;accent-color:var(--orange)">
-        Mark as Encashed
+      <input class="form-input modal-input" id="edit-sale-amount" disabled placeholder="Amount:">
+
+      <label class="modal-check">
+        <input type="checkbox" id="edit-sale-encashed">
+        <span>Mark as Encashed</span>
       </label>
     </div>
     <div class="modal-actions">
       <button class="btn-cancel" onclick="closeEditSaleModal()">Cancel</button>
-      <button class="btn-save" onclick="saveEditSale()">Save Changes</button>
+      <button class="btn-save" onclick="saveEditSale()">Update Sale</button>
     </div>
   </div>
 
