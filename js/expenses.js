@@ -9,21 +9,36 @@
 // ─────────────────────────────────────
 // STATE
 // ─────────────────────────────────────
+
+const STORAGE_KEY = 'jp_expense_batches';
+
+function loadBatches() {
+  try {
+    var raw = localStorage.getItem(STORAGE_KEY);
+    if (raw) {
+      var parsed = JSON.parse(raw);
+      if (Array.isArray(parsed) && parsed.length > 0) {
+        return parsed;
+      }
+    }
+  } catch (e) { /* corrupt data — fall through to defaults */ }
+  // Default seed data
+  return [
+    { name: 'March Expenses',  date: '2025-03-01', expenses: [] },
+    { name: 'April Expenses',  date: '2025-04-01', expenses: [] }
+  ];
+}
+
+function persistBatches() {
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(expenseState.batches));
+  } catch (e) { /* storage full or unavailable — silently ignore */ }
+}
+
 const expenseState = {
   selectedBatch: null,
   editingBatchIndex: null,
-  batches: [
-    {
-      name: 'March Expenses',
-      date: '2025-03-01',
-      expenses: []
-    },
-    {
-      name: 'April Expenses',
-      date: '2025-04-01',
-      expenses: []
-    }
-  ]
+  batches: loadBatches()
 };
 
 // Ordered category list used for summaries
@@ -241,6 +256,7 @@ function saveExpense() {
     date:        today
   });
 
+  persistBatches();
   closeExpenseModal();
 
   // Always select the batch and refresh the view so the user sees the new entry
@@ -278,6 +294,7 @@ function saveExpenseBatch() {
     expenses: []
   });
 
+  persistBatches();
   closeExpenseModal();
   expenseState.selectedBatch = null;
   document.getElementById('expense-placeholder').style.display = 'flex';
