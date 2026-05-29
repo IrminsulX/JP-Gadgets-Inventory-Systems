@@ -44,13 +44,13 @@ body {
 }
 .screen.active { display: flex; }
 
+/* ─── Legacy split layout (kept for compatibility) ─── */
 .auth-screen {
   flex-direction: row;
   background: var(--bg);
   overflow: hidden;
 }
 
-/* Left panel — logo + blobs */
 .auth-left {
   flex: 1;
   display: flex;
@@ -60,25 +60,64 @@ body {
   overflow: hidden;
 }
 
+/* ─── New centered card layout ─── */
+.auth-page {
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg);
+  overflow: hidden;
+}
+
+.auth-card-wrap {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  width: 100%;
+  max-width: 440px;
+  padding: 20px;
+  animation: fadeUp 0.5s ease both;
+}
+
+.auth-card {
+  width: 100%;
+  background: var(--cream);
+  border: 2px solid var(--orange);
+  border-radius: 24px;
+  padding: 36px 34px;
+  box-shadow: 0 8px 32px rgba(192, 82, 26, 0.12);
+}
+
+.auth-subtitle {
+  font-size: 15px;
+  color: var(--muted);
+  margin-bottom: 26px;
+  text-align: center;
+}
+
 .blob {
   position: absolute;
   border-radius: 50%;
   pointer-events: none;
 }
-.blob-1 { width: 340px; height: 340px; background: var(--blob1); top: -80px;  left: -80px; }
-.blob-2 { width: 260px; height: 260px; background: var(--blob2); bottom: 20px; left: 60px; }
-.blob-3 { width: 200px; height: 200px; background: var(--blob1); top: 50%;    right: -60px; transform: translateY(-50%); }
+.blob-1 { width: 420px; height: 420px; background: var(--blob1); top: -100px;  left: -100px; }
+.blob-2 { width: 320px; height: 320px; background: var(--blob2); bottom: 30px; left: 70px; }
+.blob-3 { width: 260px; height: 260px; background: var(--blob1); top: 50%;    right: -80px; transform: translateY(-50%); }
+.blob-4 { width: 180px; height: 180px; background: var(--blob2); top: 10%;    right: 30%;  }
 
 .logo {
   position: relative;
   z-index: 2;
   font-family: 'Playfair Display', serif;
-  font-size: 120px;
+  font-size: 170px;
   font-weight: 900;
   color: var(--text);
   line-height: 1;
-  text-shadow: 6px 6px 0 var(--orange);
-  letter-spacing: -4px;
+  text-shadow: 8px 8px 0 var(--orange);
+  letter-spacing: -6px;
   user-select: none;
   animation: logoIn 0.6s cubic-bezier(.22, 1, .36, 1) both;
 }
@@ -107,7 +146,7 @@ body {
 
 .auth-title {
   font-family: 'Playfair Display', serif;
-  font-size: 48px;
+  font-size: 52px;
   font-weight: 700;
   line-height: 1.1;
   color: var(--text);
@@ -123,15 +162,15 @@ body {
 
 .auth-input {
   width: 100%;
-  padding: 14px 20px;
+  padding: 16px 22px;
   border: 2px solid var(--orange);
-  border-radius: 12px;
+  border-radius: 14px;
   background: var(--cream);
   font-family: 'DM Sans', sans-serif;
-  font-size: 15px;
+  font-size: 16px;
   color: var(--text);
   outline: none;
-  transition: all 0.2s;
+  transition: all 0.25s;
 }
 .auth-input::placeholder { color: var(--muted); }
 .auth-input:focus {
@@ -654,6 +693,113 @@ body.page-scroll {
    RESPONSIVE — Mobile
 ════════════════════════════════════ */
 @media (max-width: 640px) {
+
+  /* ─── Auth screens — stacked vertically ─── */
+  body {
+    overflow: auto;
+  }
+
+  .auth-screen {
+    flex-direction: column;
+  }
+
+  .auth-left {
+    flex: none;
+    min-height: 38vh;
+    padding: 30px 20px 20px;
+    overflow: hidden;
+  }
+
+  .auth-right {
+    flex: 1;
+    padding: 28px 22px 40px;
+    gap: 20px;
+    animation: slideUpMobile 0.45s cubic-bezier(.22,1,.36,1) both 0.1s;
+  }
+
+  /* ─── Card layout on mobile ─── */
+  .auth-page {
+    justify-content: flex-start;
+    padding-top: 20px;
+    overflow: auto;
+  }
+
+  .auth-card-wrap {
+    max-width: 100%;
+    padding: 16px;
+    gap: 14px;
+  }
+
+  .auth-page .logo {
+    font-size: 80px;
+    text-shadow: 4px 4px 0 var(--orange);
+    letter-spacing: -3px;
+  }
+
+  .auth-card {
+    padding: 26px 20px;
+    border-radius: 20px;
+  }
+
+  @keyframes slideUpMobile {
+    from { opacity: 0; transform: translateY(30px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .logo {
+    font-size: 100px;
+    text-shadow: 5px 5px 0 var(--orange);
+    letter-spacing: -3px;
+  }
+
+  .blob-1 { width: 220px; height: 220px; top: -60px;  left: -60px; }
+  .blob-2 { width: 160px; height: 160px; bottom: 10px; left: 20px; }
+  .blob-3 { width: 140px; height: 140px; top: 50%;    right: -40px; }
+  .blob-4 { width: 100px; height: 100px; top: 5%;     right: 15%;  }
+
+  .auth-title {
+    font-size: 30px;
+    text-align: center;
+  }
+
+  .auth-subtitle {
+    font-size: 14px;
+    margin-bottom: 20px;
+  }
+
+  .auth-form {
+    gap: 12px;
+  }
+
+  .btn-primary {
+    width: 100%;
+    text-align: center;
+    align-self: stretch;
+    padding: 16px 24px;
+    font-size: 16px;
+  }
+
+  .auth-alt-link {
+    text-align: center;
+    font-size: 14px;
+  }
+
+  .back-link {
+    text-align: center;
+    margin-top: 0;
+  }
+
+  .forgot-link {
+    text-align: center;
+    font-size: 14px;
+  }
+
+  .auth-input {
+    padding: 14px 18px;
+    font-size: 15px;
+  }
+
+  /* ─── Shared nav ─── */
   .shared-nav-top {
     padding: 8px 14px 4px;
   }
@@ -673,6 +819,44 @@ body.page-scroll {
     padding: 2px 8px;
   }
 
+  /* ─── Dashboard ─── */
+  .dash-main {
+    padding: 24px 14px 20px;
+  }
+  .dash-welcome h2 {
+    font-size: 26px;
+  }
+  .dash-welcome p {
+    font-size: 14px;
+  }
+  .dash-cards {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+  .dash-card {
+    padding: 24px 18px 20px;
+  }
+  .dash-card-icon {
+    width: 56px;
+    height: 56px;
+    font-size: 26px;
+    margin-bottom: 10px;
+  }
+  .dash-card-title {
+    font-size: 18px;
+  }
+  .dash-card-text {
+    font-size: 13px;
+  }
+
+  .shared-footer {
+    padding: 14px 16px;
+  }
+  .footer-inner span {
+    font-size: 12px;
+  }
+
+  /* ─── Inventory / Sales / Expenses layout ─── */
   .inv-main {
     padding: 16px 10px 40px;
   }
@@ -691,11 +875,34 @@ body.page-scroll {
     padding: 8px 14px;
   }
 
+  /* ─── Sales table ─── */
   .sales-table-wrap {
     margin: 0 -10px;
   }
 
-  /* Modals — full width on mobile */
+  /* ─── Expense summary rows ─── */
+  .summary-row {
+    flex-wrap: wrap;
+    gap: 6px;
+    padding: 12px 14px;
+  }
+  .summary-cat {
+    flex: 1 1 100%;
+  }
+  .summary-amount {
+    font-size: 15px;
+  }
+
+  /* ─── Receipt table ─── */
+  .receipt-table {
+    font-size: 12px;
+  }
+  .receipt-table thead th,
+  .receipt-table tbody td {
+    padding: 8px 10px;
+  }
+
+  /* ─── Modals — full width on mobile ─── */
   .modal {
     min-width: unset;
     max-width: unset;

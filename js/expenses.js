@@ -227,10 +227,13 @@ function saveExpense() {
     return;
   }
 
-  const i = expenseState.editingBatchIndex;
-  if (i === null || !expenseState.batches[i]) return;
+  var i = expenseState.editingBatchIndex;
+  if (i === null || i === undefined || !expenseState.batches[i]) {
+    showToast('No batch selected. Please click a batch first.');
+    return;
+  }
 
-  const today = new Date().toISOString().slice(0, 10);
+  var today = new Date().toISOString().slice(0, 10);
   expenseState.batches[i].expenses.push({
     category:    category,
     amount:      amount,
@@ -240,9 +243,10 @@ function saveExpense() {
 
   closeExpenseModal();
 
-  if (expenseState.selectedBatch === i) {
-    showExpenseBatchView(i);
-  }
+  // Always select the batch and refresh the view so the user sees the new entry
+  expenseState.selectedBatch = i;
+  renderExpenseBatches();
+  showExpenseBatchView(i);
 
   showToast('Expense added to "' + expenseState.batches[i].name + '"! \u2713');
 }

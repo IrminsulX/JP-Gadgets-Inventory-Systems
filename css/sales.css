@@ -178,3 +178,38 @@
   transition: background 0.2s;
 }
 .sale-edit-icon:hover { background: var(--orange-dark); }
+
+/* ════════════════════════════════════
+   RESPONSIVE — Mobile
+════════════════════════════════════ */
+@media (max-width: 640px) {
+  .inv-main {
+    padding: 16px 10px 40px;
+  }
+  .inv-body {
+    flex-direction: column;
+    gap: 16px;
+  }
+  .batch-sidebar {
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 8px;
+    min-width: unset;
+  }
+  .batch-pill {
+    font-size: 12px;
+    padding: 8px 14px;
+  }
+  .batch-main {
+    gap: 10px;
+  }
+  .batch-view-title {
+    font-size: 18px;
+  }
+  .sales-total {
+    font-size: 22px;
+  }
+  .sales-table-wrap {
+    margin: 0 -10px;
+  }
+}

@@ -288,3 +288,55 @@
   border-bottom: 1px solid rgba(232, 146, 42, 0.15);
 }
 .repair-table tr:last-child td { border-bottom: none; }
+
+/* ════════════════════════════════════
+   RESPONSIVE — Mobile
+════════════════════════════════════ */
+@media (max-width: 640px) {
+  .inv-main {
+    padding: 16px 10px 40px;
+  }
+  .inv-body {
+    flex-direction: column;
+    gap: 16px;
+  }
+  .batch-sidebar {
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 8px;
+    min-width: unset;
+  }
+  .batch-pill {
+    font-size: 12px;
+    padding: 8px 14px;
+  }
+  .batch-main {
+    gap: 10px;
+  }
+  .batch-view-title {
+    font-size: 18px;
+  }
+  .items-grid {
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 10px;
+  }
+  .item-card {
+    padding: 10px;
+  }
+  .item-card-img {
+    height: 80px;
+  }
+  .item-card-name {
+    font-size: 11px;
+  }
+  .item-card-qty {
+    font-size: 22px;
+  }
+  .item-tabs {
+    gap: 4px;
+  }
+  .item-tab {
+    padding: 6px 12px;
+    font-size: 11px;
+  }
+}

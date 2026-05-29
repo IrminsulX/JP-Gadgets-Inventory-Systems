@@ -12,24 +12,28 @@
 <!-- ════════════════════════════════════
      LOGIN SCREEN
 ════════════════════════════════════ -->
-<div id="screen-login" class="screen auth-screen active">
-  <div class="auth-left">
-    <div class="blob blob-1"></div>
-    <div class="blob blob-2"></div>
-    <div class="blob blob-3"></div>
+<div id="screen-login" class="screen auth-page active">
+
+  <div class="blob blob-1"></div>
+  <div class="blob blob-2"></div>
+  <div class="blob blob-3"></div>
+  <div class="blob blob-4"></div>
+
+  <div class="auth-card-wrap">
     <div class="logo">J<span>P</span></div>
-  </div>
-  <div class="auth-right">
-    <div class="auth-title">Welcome!<br>Log In</div>
-    <div class="auth-form" id="login-form">
-      <input class="auth-input" id="login-email" type="email" placeholder="Enter Email">
-      <div class="input-wrap">
-        <input class="auth-input" id="login-password" type="password" placeholder="Enter Password">
-      </div>
-      <div class="forgot-link" onclick="goTo('screen-forgot')">Forgot Password?</div>
-      <button class="btn-primary" onclick="doLogin()">Log In</button>
-      <div class="auth-alt-link">
-        Don't have an account? <a href="signup.html">Sign up</a>
+    <div class="auth-card">
+      <div class="auth-title">Welcome Back</div>
+      <p class="auth-subtitle">Log in to your account</p>
+      <div class="auth-form" id="login-form">
+        <input class="auth-input" id="login-email" type="email" placeholder="Email address" autocomplete="email">
+        <div class="input-wrap">
+          <input class="auth-input" id="login-password" type="password" placeholder="Password" autocomplete="current-password">
+        </div>
+        <div class="forgot-link" onclick="goTo('screen-forgot')">Forgot Password?</div>
+        <button class="btn-primary" onclick="doLogin()">Log In</button>
+        <div class="auth-alt-link">
+          Don't have an account? <a href="signup.html">Sign up</a>
+        </div>
       </div>
     </div>
   </div>
@@ -38,23 +42,26 @@
 <!-- ════════════════════════════════════
      FORGOT PASSWORD SCREEN
 ════════════════════════════════════ -->
-<div id="screen-forgot" class="screen auth-screen">
-  <div class="auth-left">
-    <div class="blob blob-1"></div>
-    <div class="blob blob-2"></div>
-    <div class="blob blob-3"></div>
+<div id="screen-forgot" class="screen auth-page">
+  <div class="blob blob-1"></div>
+  <div class="blob blob-2"></div>
+  <div class="blob blob-3"></div>
+  <div class="blob blob-4"></div>
+
+  <div class="auth-card-wrap">
     <div class="logo">J<span>P</span></div>
-  </div>
-  <div class="auth-right">
-    <div class="auth-title">Forgot<br>Password</div>
-    <div class="auth-form">
-      <div class="input-wrap">
-        <input class="auth-input" id="forgot-email" type="email" placeholder="Enter Email" style="padding-right:52px">
-        <button class="inline-btn" onclick="sendVerify()">&#8594;</button>
+    <div class="auth-card">
+      <div class="auth-title">Forgot<br>Password</div>
+      <p class="auth-subtitle">We'll help you reset it</p>
+      <div class="auth-form">
+        <div class="input-wrap">
+          <input class="auth-input" id="forgot-email" type="email" placeholder="Email address" style="padding-right:52px" autocomplete="email">
+          <button class="inline-btn" onclick="sendVerify()">&#8594;</button>
+        </div>
+        <input class="auth-input" id="forgot-pass" type="password" placeholder="New password" autocomplete="new-password">
+        <button class="btn-primary" onclick="goTo('screen-newpass')">Verify</button>
+        <div class="back-link" onclick="goTo('screen-login')">&#8592; <span>Back to Login</span></div>
       </div>
-      <input class="auth-input" id="forgot-pass" type="password" placeholder="Enter Password">
-      <button class="btn-primary" onclick="goTo('screen-newpass')">Verify</button>
-      <div class="back-link" onclick="goTo('screen-login')">&#8592; <span>Back to Login</span></div>
     </div>
   </div>
 </div>
@@ -62,20 +69,23 @@
 <!-- ════════════════════════════════════
      CREATE NEW PASSWORD SCREEN
 ════════════════════════════════════ -->
-<div id="screen-newpass" class="screen auth-screen">
-  <div class="auth-left">
-    <div class="blob blob-1"></div>
-    <div class="blob blob-2"></div>
-    <div class="blob blob-3"></div>
+<div id="screen-newpass" class="screen auth-page">
+  <div class="blob blob-1"></div>
+  <div class="blob blob-2"></div>
+  <div class="blob blob-3"></div>
+  <div class="blob blob-4"></div>
+
+  <div class="auth-card-wrap">
     <div class="logo">J<span>P</span></div>
-  </div>
-  <div class="auth-right">
-    <div class="auth-title">Create<br>New Pass</div>
-    <div class="auth-form">
-      <input class="auth-input" id="new-pass" type="password" placeholder="New Password">
-      <input class="auth-input" id="confirm-pass" type="password" placeholder="Confirm Password">
-      <button class="btn-primary" onclick="doChangePassword()">Change Password</button>
-      <div class="back-link" onclick="goTo('screen-login')">&#8592; <span>Back to Login</span></div>
+    <div class="auth-card">
+      <div class="auth-title">New<br>Password</div>
+      <p class="auth-subtitle">Choose something secure</p>
+      <div class="auth-form">
+        <input class="auth-input" id="new-pass" type="password" placeholder="New password" autocomplete="new-password">
+        <input class="auth-input" id="confirm-pass" type="password" placeholder="Confirm password" autocomplete="new-password">
+        <button class="btn-primary" onclick="doChangePassword()">Change Password</button>
+        <div class="back-link" onclick="goTo('screen-login')">&#8592; <span>Back to Login</span></div>
+      </div>
     </div>
   </div>
 </div>

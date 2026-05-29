@@ -12,25 +12,29 @@
 <!-- ════════════════════════════════════
      SIGN UP SCREEN
 ════════════════════════════════════ -->
-<div id="screen-signup" class="screen auth-screen active">
-  <div class="auth-left">
-    <div class="blob blob-1"></div>
-    <div class="blob blob-2"></div>
-    <div class="blob blob-3"></div>
+<div id="screen-signup" class="screen auth-page active">
+
+  <div class="blob blob-1"></div>
+  <div class="blob blob-2"></div>
+  <div class="blob blob-3"></div>
+  <div class="blob blob-4"></div>
+
+  <div class="auth-card-wrap">
     <div class="logo">J<span>P</span></div>
-  </div>
-  <div class="auth-right">
-    <div class="auth-title">Create<br>Account</div>
-    <div class="auth-form" id="signup-form">
-      <input class="auth-input" id="signup-name" type="text" placeholder="Full Name">
-      <input class="auth-input" id="signup-email" type="email" placeholder="Enter Email">
-      <div class="input-wrap">
-        <input class="auth-input" id="signup-password" type="password" placeholder="Enter Password">
-      </div>
-      <input class="auth-input" id="signup-confirm" type="password" placeholder="Confirm Password">
-      <button class="btn-primary" onclick="doSignup()">Sign Up</button>
-      <div class="auth-alt-link">
-        Already have an account? <a href="login.html">Log in</a>
+    <div class="auth-card">
+      <div class="auth-title">Create Account</div>
+      <p class="auth-subtitle">Join JP Inventory today</p>
+      <div class="auth-form" id="signup-form">
+        <input class="auth-input" id="signup-name" type="text" placeholder="Full name" autocomplete="name">
+        <input class="auth-input" id="signup-email" type="email" placeholder="Email address" autocomplete="email">
+        <div class="input-wrap">
+          <input class="auth-input" id="signup-password" type="password" placeholder="Password" autocomplete="new-password">
+        </div>
+        <input class="auth-input" id="signup-confirm" type="password" placeholder="Confirm password" autocomplete="new-password">
+        <button class="btn-primary" onclick="doSignup()">Sign Up</button>
+        <div class="auth-alt-link">
+          Already have an account? <a href="login.html">Log in</a>
+        </div>
       </div>
     </div>
   </div>
