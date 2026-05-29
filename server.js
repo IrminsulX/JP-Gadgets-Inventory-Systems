@@ -66,6 +66,23 @@ db.exec(`
     sale_date       TEXT    DEFAULT (datetime('now','localtime')),
     FOREIGN KEY (batch_id) REFERENCES batches(id) ON DELETE SET NULL
   );
+
+  CREATE TABLE IF NOT EXISTS expense_batches (
+    id         INTEGER PRIMARY KEY AUTOINCREMENT,
+    name       TEXT    NOT NULL,
+    date       TEXT    NOT NULL,
+    created_at TEXT    DEFAULT (datetime('now','localtime'))
+  );
+
+  CREATE TABLE IF NOT EXISTS expenses (
+    id          INTEGER PRIMARY KEY AUTOINCREMENT,
+    batch_id    INTEGER NOT NULL,
+    category    TEXT    NOT NULL,
+    amount      REAL    NOT NULL DEFAULT 0,
+    description TEXT    DEFAULT '',
+    date        TEXT    NOT NULL,
+    FOREIGN KEY (batch_id) REFERENCES expense_batches(id) ON DELETE CASCADE
+  );
 `);
 
 // ── Seed data (only if empty) ────────
@@ -229,6 +246,51 @@ app.get('/api/sales/summary', (_req, res) => {
     transactions: total.transactions || 0,
     topProduct: top ? top.unit : '—',
     topQty: top ? top.qty : 0
+  });
+});
+
+// ════════════════════════════════════
+//  EXPENSE ROUTES
+// ════════════════════════════════════
+
+// ── GET all expense batches with nested expenses ──
+app.get('/api/expense-batches', (_req, res) => {
+  const batches = db.prepare('SELECT * FROM expense_batches ORDER BY id').all();
+  for (const b of batches) {
+    b.expenses = db.prepare('SELECT * FROM expenses WHERE batch_id = ? ORDER BY id').all(b.id);
+  }
+  res.json(batches);
+});
+
+// ── POST create expense batch ──
+app.post('/api/expense-batches', (req, res) => {
+  const { name, date } = req.body;
+  if (!name || !date) return res.status(400).json({ error: 'name and date required' });
+  const result = db.prepare('INSERT INTO expense_batches (name, date) VALUES (?, ?)').run(name, date);
+  res.json({ id: result.lastInsertRowid, name, date, expenses: [] });
+});
+
+// ── DELETE expense batch ──
+app.delete('/api/expense-batches/:id', (req, res) => {
+  db.prepare('DELETE FROM expense_batches WHERE id = ?').run(req.params.id);
+  res.json({ ok: true });
+});
+
+// ── POST add expense to batch ──
+app.post('/api/expense-batches/:id/expenses', (req, res) => {
+  const { category, amount, description, date } = req.body;
+  if (!category) return res.status(400).json({ error: 'category required' });
+  if (amount === undefined || amount === null) return res.status(400).json({ error: 'amount required' });
+  const result = db.prepare(
+    'INSERT INTO expenses (batch_id, category, amount, description, date) VALUES (?, ?, ?, ?, ?)'
+  ).run(req.params.id, category, amount, description || '', date || '');
+  res.json({
+    id:          result.lastInsertRowid,
+    batch_id:    parseInt(req.params.id),
+    category:    category,
+    amount:      amount,
+    description: description || '',
+    date:        date || ''
   });
 });
 

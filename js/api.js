@@ -82,7 +82,21 @@ const API = (function() {
     deleteSale: (id) => request('DELETE', '/api/sales/' + id),
 
     /** Get sales summary stats */
-    getSalesSummary: () => request('GET', '/api/sales/summary')
+    getSalesSummary: () => request('GET', '/api/sales/summary'),
+
+    // ── Expenses ─────────────────────
+
+    /** Get all expense batches with nested expenses */
+    getExpenseBatches: () => request('GET', '/api/expense-batches'),
+
+    /** Create a new expense batch */
+    createExpenseBatch: (name, date) => request('POST', '/api/expense-batches', { name, date }),
+
+    /** Delete an expense batch */
+    deleteExpenseBatch: (id) => request('DELETE', '/api/expense-batches/' + id),
+
+    /** Add an expense to a batch */
+    addExpense: (batchId, data) => request('POST', '/api/expense-batches/' + batchId + '/expenses', data)
   };
 
 })();

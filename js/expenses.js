@@ -1,44 +1,17 @@
 /* ════════════════════════════════════
    JP APP — EXPENSES LOGIC
    expenses.js
-   Batch pills with Edit icon → Add New Expenses modal
-   Category summary view with totals
-   Category detail modal (receipt-style)
+   Uses API.js → Express + SQLite backend
 ════════════════════════════════════ */
 
 // ─────────────────────────────────────
 // STATE
 // ─────────────────────────────────────
 
-const STORAGE_KEY = 'jp_expense_batches';
-
-function loadBatches() {
-  try {
-    var raw = localStorage.getItem(STORAGE_KEY);
-    if (raw) {
-      var parsed = JSON.parse(raw);
-      if (Array.isArray(parsed) && parsed.length > 0) {
-        return parsed;
-      }
-    }
-  } catch (e) { /* corrupt data — fall through to defaults */ }
-  // Default seed data
-  return [
-    { name: 'March Expenses',  date: '2025-03-01', expenses: [] },
-    { name: 'April Expenses',  date: '2025-04-01', expenses: [] }
-  ];
-}
-
-function persistBatches() {
-  try {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(expenseState.batches));
-  } catch (e) { /* storage full or unavailable — silently ignore */ }
-}
-
 const expenseState = {
   selectedBatch: null,
   editingBatchIndex: null,
-  batches: loadBatches()
+  batches: []
 };
 
 // Ordered category list used for summaries
@@ -52,6 +25,27 @@ const ALL_CATEGORIES = [
   'Employee Salary',
   'Other'
 ];
+
+// ─────────────────────────────────────
+// DATA LOADING
+// ─────────────────────────────────────
+
+async function loadBatches() {
+  try {
+    expenseState.batches = await API.getExpenseBatches();
+  } catch (e) {
+    console.error('Failed to load expense batches:', e);
+    showToast('Could not connect to server');
+  }
+}
+
+async function refresh() {
+  await loadBatches();
+  renderExpenseBatches();
+  if (expenseState.selectedBatch !== null) {
+    showExpenseBatchView(expenseState.selectedBatch);
+  }
+}
 
 // ─────────────────────────────────────
 // RENDER EXPENSE BATCH SIDEBAR
@@ -102,11 +96,6 @@ function selectExpenseBatch(i) {
   showExpenseBatchView(i);
 }
 
-/**
- * Display the category summary for the selected batch.
- * Shows "Details for: [Batch Name]" with per-category totals,
- * a "..." button to drill into individual expenses, and Total All.
- */
 function showExpenseBatchView(i) {
   const batch = expenseState.batches[i];
   if (!batch) return;
@@ -117,7 +106,6 @@ function showExpenseBatchView(i) {
   document.getElementById('expense-batch-view-title').textContent =
     'Details for: ' + batch.name;
 
-  // Compute totals per category
   const catTotals = {};
   ALL_CATEGORIES.forEach(function(cat) { catTotals[cat] = 0; });
   var grandTotal = 0;
@@ -127,13 +115,11 @@ function showExpenseBatchView(i) {
     if (catTotals.hasOwnProperty(cat)) {
       catTotals[cat] += exp.amount;
     } else {
-      // Fallback: "Other" for unrecognised categories
       catTotals['Other'] += exp.amount;
     }
     grandTotal += exp.amount;
   });
 
-  // Build summary rows
   var html = '';
   ALL_CATEGORIES.forEach(function(cat) {
     var total = catTotals[cat];
@@ -144,7 +130,6 @@ function showExpenseBatchView(i) {
       + '</div>';
   });
 
-  // Total All row
   html += '<div class="summary-row summary-total-row">'
     + '<span class="summary-cat">Total All</span>'
     + '<span class="summary-amount">\u20B1' + formatNumber(grandTotal) + '</span>'
@@ -158,11 +143,6 @@ function showExpenseBatchView(i) {
 // CATEGORY DETAIL MODAL
 // ─────────────────────────────────────
 
-/**
- * Open a receipt-style modal showing all expenses for a given category
- * within the currently selected batch.
- * @param {string} categoryName
- */
 function openCategoryDetail(categoryName) {
   var i = expenseState.selectedBatch;
   if (i === null) return;
@@ -172,10 +152,8 @@ function openCategoryDetail(categoryName) {
     return exp.category === categoryName;
   });
 
-  // Set title
   document.getElementById('category-detail-title').textContent = categoryName;
 
-  // Build table rows
   var tbody = document.getElementById('receipt-tbody');
   var catTotal = 0;
 
@@ -192,10 +170,8 @@ function openCategoryDetail(categoryName) {
     }).join('');
   }
 
-  // Set total
   document.getElementById('receipt-total').textContent = 'Total: \u20B1' + formatNumber(catTotal);
 
-  // Show modal
   document.getElementById('modal-category-detail').classList.add('show');
   document.getElementById('expense-modal-overlay').classList.add('show');
 }
@@ -228,15 +204,15 @@ function closeExpenseModal() {
   document.getElementById('expense-modal-overlay').classList.remove('show');
 }
 
-function saveExpense() {
-  const category    = document.getElementById('expense-category').value;
-  const amountStr   = document.getElementById('expense-amount').value.trim();
-  const description = document.getElementById('expense-desc').value.trim();
+async function saveExpense() {
+  var category    = document.getElementById('expense-category').value;
+  var amountStr   = document.getElementById('expense-amount').value.trim();
+  var description = document.getElementById('expense-desc').value.trim();
 
   if (!category)   { showToast('Please select a category'); return; }
   if (!amountStr)  { showToast('Please enter an amount');   return; }
 
-  const amount = parseFloat(amountStr);
+  var amount = parseFloat(amountStr);
   if (isNaN(amount) || amount < 0) {
     showToast('Please enter a valid amount');
     return;
@@ -248,23 +224,29 @@ function saveExpense() {
     return;
   }
 
+  var batchId = expenseState.batches[i].id;
   var today = new Date().toISOString().slice(0, 10);
-  expenseState.batches[i].expenses.push({
-    category:    category,
-    amount:      amount,
-    description: description,
-    date:        today
-  });
 
-  persistBatches();
+  try {
+    await API.addExpense(batchId, {
+      category:    category,
+      amount:      amount,
+      description: description,
+      date:        today
+    });
+  } catch (e) {
+    showToast('Server error: ' + e.message);
+    return;
+  }
+
   closeExpenseModal();
 
-  // Always select the batch and refresh the view so the user sees the new entry
   expenseState.selectedBatch = i;
+  await loadBatches();
   renderExpenseBatches();
   showExpenseBatchView(i);
 
-  showToast('Expense added to "' + expenseState.batches[i].name + '"! \u2713');
+  showToast('Expense added! \u2713');
 }
 
 // ─────────────────────────────────────
@@ -281,24 +263,26 @@ function openAddBatchModal() {
   }, 100);
 }
 
-function saveExpenseBatch() {
-  const name = document.getElementById('expense-batch-name').value.trim();
-  const date = document.getElementById('expense-batch-date').value;
+async function saveExpenseBatch() {
+  var name = document.getElementById('expense-batch-name').value.trim();
+  var date = document.getElementById('expense-batch-date').value;
 
   if (!name) { showToast('Please enter a batch name'); return; }
   if (!date) { showToast('Please select a date');      return; }
 
-  expenseState.batches.push({
-    name:     name,
-    date:     date,
-    expenses: []
-  });
+  try {
+    await API.createExpenseBatch(name, date);
+  } catch (e) {
+    showToast('Server error: ' + e.message);
+    return;
+  }
 
-  persistBatches();
   closeExpenseModal();
   expenseState.selectedBatch = null;
   document.getElementById('expense-placeholder').style.display = 'flex';
   document.getElementById('expense-batch-view').classList.remove('visible');
+
+  await loadBatches();
   renderExpenseBatches();
   showToast('Expense batch "' + name + '" created! \u2713');
 }
@@ -323,8 +307,9 @@ function formatNumber(num) {
 // ─────────────────────────────────────
 // INIT
 // ─────────────────────────────────────
-(function init() {
+(async function init() {
   initNav();
+  await loadBatches();
   renderExpenseBatches();
   document.getElementById('expense-placeholder').style.display = 'flex';
 })();
