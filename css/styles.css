@@ -273,10 +273,18 @@ body.page-scroll {
 }
 
 .shared-nav-top {
+  position: relative;
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding: 10px 32px 4px;
+}
+
+/* True center via absolute positioning */
+.shared-nav-logo {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
 }
 
 .shared-nav-link {

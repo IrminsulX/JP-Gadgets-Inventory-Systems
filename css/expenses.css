@@ -24,41 +24,164 @@
 }
 .add-expense-btn:hover { background: var(--orange-dark); transform: translateY(-2px); }
 
-/* ─── Expense List ─── */
-.expense-list {
+/* ─── Category Summary Container ─── */
+.summary-container {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 8px;
+  animation: fadeUp 0.3s ease both;
 }
 
-.expense-row {
+.summary-row {
   display: flex;
   align-items: center;
   background: var(--cream);
   border-radius: 12px;
-  padding: 14px 20px;
+  padding: 13px 18px;
   border-left: 4px solid var(--orange-dark);
-  gap: 16px;
+  gap: 12px;
   animation: fadeUp 0.3s ease both;
 }
-.expense-row .exp-name      { flex: 1; font-weight: 600; font-size: 14px; min-width: 0; }
-.expense-row .exp-desc-text { flex: 1.5; font-size: 13px; color: var(--muted); min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.expense-row .exp-date      { color: var(--muted); font-size: 13px; white-space: nowrap; }
-.expense-row .exp-amount    { font-family: 'Playfair Display', serif; font-weight: 700; color: var(--orange-deep); font-size: 18px; white-space: nowrap; }
+
+.summary-cat {
+  flex: 1;
+  font-weight: 600;
+  font-size: 14px;
+  color: var(--text);
+  min-width: 0;
+}
+
+.summary-amount {
+  font-family: 'Playfair Display', serif;
+  font-weight: 700;
+  font-size: 17px;
+  color: var(--orange-deep);
+  white-space: nowrap;
+}
+
+/* "..." button on each category row */
+.summary-dots {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  background: rgba(232, 146, 42, 0.12);
+  border: 2px solid rgba(232, 146, 42, 0.3);
+  border-radius: 50%;
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--orange-dark);
+  cursor: pointer;
+  transition: all 0.2s;
+  flex-shrink: 0;
+  line-height: 1;
+  padding: 0;
+}
+.summary-dots:hover {
+  background: var(--orange);
+  color: #fff;
+  border-color: var(--orange);
+  transform: scale(1.1);
+}
+
+.summary-dots-placeholder {
+  width: 32px;
+  flex-shrink: 0;
+}
+
+/* Total All row */
+.summary-total-row {
+  border-left-color: var(--orange-deep);
+  background: rgba(232, 146, 42, 0.08);
+  margin-top: 4px;
+}
+.summary-total-row .summary-cat {
+  font-family: 'Playfair Display', serif;
+  font-style: italic;
+  font-size: 16px;
+}
+.summary-total-row .summary-amount {
+  font-size: 20px;
+  color: var(--orange-deep);
+}
+
+/* ─── Receipt Table (category detail modal) ─── */
+.receipt-table-wrap {
+  max-height: 320px;
+  overflow-y: auto;
+}
+
+.receipt-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+
+.receipt-table thead th {
+  background: var(--orange);
+  color: #fff;
+  padding: 10px 14px;
+  text-align: left;
+  font-size: 12px;
+  font-weight: 600;
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}
+.receipt-table thead th:first-child { border-radius: 8px 0 0 0; }
+.receipt-table thead th:last-child  { border-radius: 0 8px 0 0; }
+
+.receipt-table tbody td {
+  padding: 10px 14px;
+  border-bottom: 1px solid rgba(232, 146, 42, 0.15);
+  color: var(--text);
+}
+.receipt-table tbody tr:last-child td { border-bottom: none; }
+
+.receipt-amount-col {
+  text-align: right;
+  font-family: 'Playfair Display', serif;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.receipt-empty {
+  text-align: center;
+  color: var(--muted);
+  font-style: italic;
+  padding: 24px 14px !important;
+}
+
+.receipt-total {
+  text-align: right;
+  font-family: 'Playfair Display', serif;
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--orange-deep);
+  padding: 10px 0 0;
+  border-top: 2px solid var(--orange);
+  margin-top: 4px;
+}
 
 /* ─── Responsive ─── */
 @media (max-width: 640px) {
-  .expense-row {
+  .summary-row {
     flex-wrap: wrap;
     gap: 6px;
     padding: 12px 14px;
   }
-  .expense-row .exp-name,
-  .expense-row .exp-desc-text {
+  .summary-cat {
     flex: 1 1 100%;
   }
-  .expense-row .exp-date,
-  .expense-row .exp-amount {
-    font-size: 13px;
+  .summary-amount {
+    font-size: 15px;
+  }
+  .receipt-table {
+    font-size: 12px;
+  }
+  .receipt-table thead th,
+  .receipt-table tbody td {
+    padding: 8px 10px;
   }
 }

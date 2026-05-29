@@ -48,11 +48,11 @@
       <div class="placeholder-msg" id="expense-placeholder">
         Select batch to<br>view expenses.
       </div>
-      <!-- Expense Items View -->
+      <!-- Expense Category Summary View -->
       <div class="batch-view" id="expense-batch-view">
         <div class="batch-view-title" id="expense-batch-view-title"></div>
-        <div class="expense-list" id="expense-items-list">
-          <!-- Expense rows injected by JS -->
+        <div class="summary-container" id="expense-summary-container">
+          <!-- Category summary rows + Total All injected by JS -->
         </div>
       </div>
     </div>
@@ -91,6 +91,27 @@
     <div class="modal-actions">
       <button class="btn-cancel" onclick="closeExpenseModal()">Cancel</button>
       <button class="btn-save" onclick="saveExpense()">Save Expense</button>
+    </div>
+  </div>
+
+  <!-- ── Category Detail Modal (receipt) ── -->
+  <div class="modal modal-wide" id="modal-category-detail">
+    <div class="modal-title" id="category-detail-title">Category Details</div>
+    <div class="modal-body">
+      <div class="receipt-table-wrap">
+        <table class="receipt-table">
+          <thead>
+            <tr><th>Description</th><th>Date</th><th class="receipt-amount-col">Amount</th></tr>
+          </thead>
+          <tbody id="receipt-tbody">
+            <!-- Rows injected by JS -->
+          </tbody>
+        </table>
+      </div>
+      <div class="receipt-total" id="receipt-total">Total: ₱0.00</div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn-cancel" onclick="closeCategoryDetail()">Close</button>
     </div>
   </div>
 
